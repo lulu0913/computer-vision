@@ -51,18 +51,19 @@ def classify(train_data, train_label):
 
     return w, bias
 
-def show(X0, X1, W, b):
+def show(x1, x2, W, b):
     plt.grid()
-    plt.scatter(X0[:,1],X0[:,2],c = 'r',marker='o',s=500)
-    plt.scatter(X1[:,1],X1[:,2],c = 'g',marker='*',s=500)
-    p1=[-2.0,2.0]
-    p2=[(W[0]+2*W[1])/W[2],(W[0]-2*W[1])/W[2]]
+    plt.scatter(x1[:,0], x1[:,1],c = 'r',marker='o',s=20)
+    plt.scatter(x2[:,0], x2[:,1],c = 'g',marker='*',s=20)
+    p1=[-4.0,4.0]
+    p2=[(b+2*W[0])/W[1],(b-2*W[0])/W[1]]
     plt.plot(p1,p2)
     plt.show()
 
 if __name__ == '__main__':
 
     w, bias = classify(X, Y)
-    show(X0, X1, w, bias)
+#    print(w, bias)
+    show(x1, x2, w, bias)
 
 
