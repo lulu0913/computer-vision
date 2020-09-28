@@ -19,7 +19,7 @@ Y = np.hstack((-np.ones(num_observations),np.ones(num_observations)))
 # y是1000*1的数组，代表是标签
 
 rate = 0.01
-error = 0.05
+error = 0.01
 size = 100
 
 #----------------训练找到w和b----------------
@@ -28,22 +28,24 @@ def classify(train_data, train_label):
     w = np.zeros(len(train_data[0]))
     bias = 0.0
     num = len(train_data)
+    print('num: ', num)
     j = 0
     while True:
         j+=1
         for i in range(num):
             x = train_data[i]
             y = train_label[i]
-            if y * (np.dot(w, x) + bias) <= 0:  # if prediction is wrong
-                w = w + rate * y * x.T  # update weight:w = w + r * x_i * y_i
-                bias = bias + rate * y  # update b:b = b + r * y_i
+            y_prediction = np.dot(w, x) + bias
+            if y * y_prediction <= 0:  # if prediction is wrong
+                w = w + rate * (y - y_prediction) * x.T  # update weight:w = w + r * x_i * (y_i - y_prediction)
+                bias = bias + rate * (y - y_prediction)  # update b:b = b + r * (y_i - y_prediction)
 
         loss = 0
         for i in range(num):
             y = train_label[i]
             output = np.dot(w, train_data[i]) + bias
             if output * y <= 0: 
-                loss += 1
+                loss += abs(y - y_prediction)
         print('This is ', j, 'th' )
         if (loss / num) <= error:
             print('w: ', w, 'bias: ', bias)
@@ -56,7 +58,7 @@ def show(x1, x2, W, b):
     plt.scatter(x1[:,0], x1[:,1],c = 'r',marker='o',s=20)
     plt.scatter(x2[:,0], x2[:,1],c = 'g',marker='*',s=20)
     p1=[-4.0,4.0]
-    p2=[(b+2*W[0])/W[1],(b-2*W[0])/W[1]]
+    p2=[(-b+4*W[0])/W[1],(-b-4*W[0])/W[1]]
     plt.plot(p1,p2)
     plt.show()
 
